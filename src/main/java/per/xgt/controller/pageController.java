@@ -90,4 +90,9 @@ public class pageController {
         return "addemp";
     }
 
+    @RequestMapping("/dormitorydetails")
+    public String dormitorydetails(){
+        return "dormitorydetails";
+    }
+
 }

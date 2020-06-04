@@ -77,15 +77,19 @@
 				}else {
 					$.post("/login",$("#login").serialize(),function(data){
 						if (data.status==200){
-							var ip = returnCitySN.cip;
-							$.get("/insertLoginmsg",{"ip":ip},function (data) {
-								if (data.status == 400){
-									$.toast(date.message,1,true);
-									window.location.href = "/backlogin";
-								}else if (data.status == 200){
-									window.location.href = "/service";
-								}
-							},"json");
+							var ip = "";
+							$.getJSON("https://api.ipify.org/?format=jsonp&callback=?&_=" + Math.random(), function (result) {
+								ip = result.ip
+								$.get("/insertLoginmsg",{"ip":ip},function (data) {
+									if (data.status == 400){
+										$.toast(date.message,1,true);
+										window.location.href = "/backlogin";
+									}else if (data.status == 200){
+										window.location.href = "/service";
+									}
+								},"json");
+							});
+							// var ip = returnCitySN.cip;
 						}else{
 							$.toast(data.message,1,true);
 						}

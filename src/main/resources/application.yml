@@ -1,0 +1,31 @@
+server:
+  port: 80
+spring:
+  mvc:
+    view:
+      prefix: classpath:/templates/
+      suffix: .html
+  thymeleaf:
+    prefix: classpath:/templates/
+    check-template-location: true
+    suffix: .html
+    encoding: UTF-8
+    mode: LEGACYHTML5
+    cache: false
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/srsmsystem
+    username: root
+    password: root
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      initial-size: 5
+      min-idle: 5
+      max-active: 20
+      test-on-borrow: false
+      time-between-eviction-runs-millis: 300000
+      stat-view-servlet:
+        allow: true
+mybatis:
+#  mapper-locations: classpath:dao/mapper/*.xml
+  type-aliases-package: per.xgt.entity

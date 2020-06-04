@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="per.xgt.dao.empMapper">
+
+    <insert id="addEmp">
+        insert into t_emp
+        values (#{param1},#{param2},#{param3},#{param4},#{param5},#{param6},#{param7},null,null,0)
+    </insert>
+
+    <update id="updateEmpPassword">
+        update t_emp set empPassword = #{param2} where empNo = #{param1}
+    </update>
+
+    <select id="findOneByEmpNo" resultType="per.xgt.pojo.Emp">
+        select *
+        from t_emp
+        where empDel = 0
+        and empNo = #{username}
+        and empPassword = #{password}
+    </select>
+
+    <select id="findAllEmpByDepartmentId" resultType="per.xgt.pojo.Emp">
+        SELECT e.empNo,e.empName,d.departmentName,r.roleName,e.empPhone
+        FROM t_emp e
+        INNER JOIN t_department d
+        INNER JOIN t_role r
+        WHERE e.empDepartmentId = d.departmentId
+        AND e.empRoleId = r.roleId
+        AND e.empDel = 0
+        <if test="empDepartmentId != 0 ">
+            AND e.empDepartmentId = #{empDepartmentId}
+        </if>
+    </select>
+
+    <select id="findAllInstructor" resultType="per.xgt.pojo.Emp">
+        SELECT e.empNo,e.empName
+        FROM t_emp e
+        WHERE e.empRoleId = 2
+    </select>
+
+    <select id="getAddEmpCount" resultType="java.lang.Integer">
+        SELECT COUNT(1)
+        FROM t_emp
+        WHERE empNo LIKE CONCAT(#{param1},#{param2},#{param3},'%')
+    </select>
+
+    <select id="findOneEmpByEmpNo" resultType="per.xgt.dto.DtoAddEmp">
+        SELECT emp.empNo,emp.empName,emp.empGender,emp.empCardNo,role.roleName,department.departmentName
+        FROM t_emp emp,t_role role,t_department department
+        WHERE emp.empDepartmentId = department.departmentId
+        AND emp.empRoleId = role.roleId
+        AND emp.empNo = #{empNo}
+    </select>
+
+
+</mapper>

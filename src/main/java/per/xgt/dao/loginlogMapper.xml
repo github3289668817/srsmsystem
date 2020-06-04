@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="per.xgt.dao.loginlogMapper">
+
+    <insert id="insertLoginLog" parameterType="per.xgt.pojo.Loginlog">
+        insert into t_loginlog values (null,#{loginLogIp},#{loginLogNo},#{loginLogCreatetime})
+    </insert>
+
+    <select id="getAllLoginlogs" resultType="per.xgt.pojo.Loginlog">
+        select *
+        from t_loginlog
+        where loginLogNo = #{userNo}
+        order by
+        loginLogId DESC
+        limit 0,10
+    </select>
+
+</mapper>

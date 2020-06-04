@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>财务统计</title>
+</head>
+<body>
+    <div id="container" style="min-width:400px;height:400px;margin-top: 50px"></div>
+</body>
+<script src="/js/jquery-3.4.1.js" th:src="@{/js/jquery-3.4.1.js}"></script>
+<script src="//code.highcharts.com.cn/highcharts/8.1.0/highcharts.js"></script>
+<script src="//code.highcharts.com.cn/highcharts/8.1.0/highcharts-3d.js"></script>
+<script src="//code.highcharts.com.cn/highcharts/8.1.0/modules/exporting.js"></script>
+<script src="/js/echarts.js" th:src="@{/js/echarts.js}"></script>
+<script type="text/javascript">
+    $(function () {
+
+        $.getJSON("/getTuitionTu",function (data) {
+            var name = [];
+            var num = [];
+            for (var i = 0;i<data.length;i++){
+                name[i] = data[i].schoolName;
+                num[i] = data[i].money;
+            }
+            // 基于准备好的dom，初始化echarts实例
+            var myChart = echarts.init(document.getElementById('container'));
+
+            // 指定图表的配置项和数据
+            var option = {
+                title: {
+                    text: '各学院收费金额(单位:元)'
+                },
+                tooltip: {},
+                legend: {
+                    data:['学院收费总额']
+                },
+                xAxis: {
+                    data: name
+                },
+                yAxis: {},
+                series: [{
+                    name: '金额',
+                    type: 'bar',
+                    data: num
+                }]
+            };
+            // 使用刚指定的配置项和数据显示图表。
+            myChart.setOption(option);
+        });
+    });
+</script>
+</html>

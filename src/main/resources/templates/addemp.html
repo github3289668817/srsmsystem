@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>新增员工</title>
+    <link rel="stylesheet" href="/layui/css/layui.css" th:src="@{/layui/css/layui.css}">
+    <link rel="stylesheet" type="text/css" href="./css/Fytx_Tips.css" th:href="@{/css/Fytx_Tips.css}" media="all"/>
+</head>
+<body>
+<div style="margin-top: 50px;margin-left: 50px">
+    <form id="form" class="layui-form">
+        <div class="layui-form-item">
+            <label class="layui-form-label">姓名</label>
+            <div class="layui-input-block">
+                <input style="width: 250px" type="text" id="empName" name="empName" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">职位</label>
+            <div style="width: 250px" class="layui-input-block">
+                <select id="empRoleId" name="empRoleId" lay-filter="empRoleId">
+                    <option value="0">请选择职务</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">部门</label>
+            <div style="width: 250px" class="layui-input-block">
+                <select disabled id="empDepartmentId" name="empDepartmentId">
+                    <option value="0">请选择部门</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">性别</label>
+            <div class="layui-input-block">
+                <input type="radio" name="empGender" value="男" title="男" checked>
+                <input type="radio" name="empGender" value="女" title="女">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">身份证号</label>
+            <div class="layui-input-block">
+                <input style="width: 250px" type="text" id="empCardNo" name="empCardNo" placeholder="请输入标题"
+                       autocomplete="off" class="layui-input">
+                <p style="color: red">PS：最后一位如若字母,请小写</p>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button id="btn" type="button" class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+<script type="text/javascript" src="..//layui/layui.js" th:src="@{/layui/layui.js}"></script>
+<script type="text/javascript" src="/js/jquery-3.4.1.js" th:src="@{/js/jquery-3.4.1.js}"></script>
+<script type="text/javascript" src="./js/Fytx_Tips.js" th:src="@{/js/Fytx_Tips.js}"></script>
+<script type="text/javascript" src="./js/Fytx_Tips_Config.js" th:src="@{/js/Fytx_Tips_Config.js}"></script>
+<script type="text/javascript">
+    layui.use(['form', 'layer'], function () {
+        var form = layui.form;
+        var $ = layui.jquery;
+        var layer = layui.layer;
+
+        inidata();
+
+        function inidata() {
+            $.getJSON("/findAllRole", function (arr) {
+                for (var i = 0; i < arr.length; i++) {
+                    $("#empRoleId").append("<option value='" + arr[i].roleId + "'>" + arr[i].roleName + "</option>")
+                }
+                form.render("select");
+            });
+            $.getJSON("/findAllDepartment", function (arr) {
+                for (var i = 0; i < arr.length; i++) {
+                    $("#empDepartmentId").append("<option value='" + arr[i].departmentId + "'>" + arr[i].departmentName + "</option>")
+                }
+                form.render("select");
+            });
+        }
+
+        $("#btn").click(function () {
+            var empName = $("#empName").val();
+            var empRoleId = $("#empRoleId option:selected").val();
+            var empDepartmentId = $("#empDepartmentId option:selected").val();
+            var empGender = $("input[name = 'empGender']:checked").val();
+            var empCdardNo = $("#empCardNo").val();
+            var reEmpCardNo = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|x)$)/;
+            if (empName == "" || empName == null) {
+                $.toast("姓名不能为空", 1, true);
+                return false;
+            } else if (empRoleId == 0) {
+                $.toast("请选择该员工的职位", 1, true);
+                return false;
+            } else if (reEmpCardNo.test(empCdardNo) == false) {
+                $.toast("身份证输入不合法", 1, true);
+                return false;
+            } else {
+                $.post("/addEmp",{
+                    "empName":empName,
+                    "empRoleId":empRoleId,
+                    "empDepartmentId":empDepartmentId,
+                    "empGender":empGender,
+                    "empCdardNo":empCdardNo,
+                },function (data) {
+                    if(data == null){
+                        $.toast("操作过于频繁，请稍后再试",1,true);
+                    }else {
+                        $("#form")[0].reset();
+                        layer.open({
+                            type: 2,
+                            title: '确认信息',
+                            shadeClose: false,
+                            area: ['500px','500px'],
+                            content: "/showaddemp"+"/"+data.empNo
+                        });
+                    }
+                },"json");
+            }
+        });
+        form.on("select(empRoleId)", function (empRoleId) {
+            $("#empDepartmentId").attr("disabled", false);
+            var empRoleId = empRoleId.value;
+            var num = empRoleId - 1;
+            if (num < 0) {
+                num = 0;
+            }
+            $("#empDepartmentId").find("option[value = " + num + "]").attr("selected", "selected");
+            $("#empDepartmentId").attr("disabled", true);
+            form.render("select");
+        });
+
+    });
+</script>
+</html>

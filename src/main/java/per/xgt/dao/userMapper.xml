@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="per.xgt.dao.userMapper">
+
+    <insert id="addUser">
+        insert into t_user
+        values (#{param1},#{param2},#{param3},#{param4},#{param5},null,0)
+    </insert>
+
+    <update id="updateUserPassword">
+        update t_user set userPassword = #{param2} where userNo = #{param1}
+    </update>
+
+    <select id="findOneByUserNo" resultType="per.xgt.pojo.User">
+        select *
+        from t_user
+        where userDel = 0
+        and userNo = #{username}
+        and userPassword = #{password}
+    </select>
+
+    <select id="findAUserByUserNo" resultType="per.xgt.pojo.User">
+        select *
+        from t_user
+        where userDel = 0
+        and userNo = #{username}
+    </select>
+
+</mapper>

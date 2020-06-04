@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>学生报到管理服务系统</title>
+    <link rel="stylesheet" type="text/css" href="./css/Fytx_Tips.css" th:href="@{/css/Fytx_Tips.css}" media="all"/>
+    <link rel="stylesheet" type="text/css" href="./css/bootstrap.css" th:href="@{/css/bootstrap.css}">
+</head>
+<body>
+<div style="width: 500px;margin: auto;margin-top: 80px;left: auto">
+    <form id="addSchool" class="form-inline">
+        <div class="form-group">
+            <label for="exampleInputName2">学院名称</label>
+            <input type="text" name="schoolName" class="form-control" id="exampleInputName2">
+        </div>
+        <button id="button" type="button" class="btn btn-default">添加</button>
+    </form>
+</div>
+</body>
+<script type="text/javascript" src="./js/jquery-3.4.1.js" th:src="@{/js/jquery-3.4.1.js}"></script>
+<script type="text/javascript" src="./js/Fytx_Tips.js" th:src="@{/js/Fytx_Tips.js}"></script>
+<script type="text/javascript" src="./js/Fytx_Tips_Config.js" th:src="@{/js/Fytx_Tips_Config.js}"></script>
+<script type="text/javascript" src="./js/bootstrap.min.js" th:src="@{/js/bootstrap.min.js}"></script>
+<script type="text/javascript">
+    $(function () {
+
+        $("#button").click(function () {
+            $.post("/addSchool",$("#addSchool").serialize(),function (date) {
+                    $.toast(date.message,1,true);
+            },"json")
+        })
+
+    })
+</script>
+</html>

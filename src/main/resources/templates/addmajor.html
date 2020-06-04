@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>学生报到管理服务系统</title>
+    <link rel="stylesheet" type="text/css" href="./css/Fytx_Tips.css" th:href="@{/css/Fytx_Tips.css}" media="all"/>
+    <link type="text/css" rel="stylesheet" href="../css/layui.css" th:href="@{/css/layui.css}" media="all">
+</head>
+<body>
+<div id="addOneMajor" style="width: 400px;margin: auto;margin-top: 100px;">
+    <form id="addMajorForm" class="layui-form" action="">
+        <div class="layui-form-item">
+            <label class="layui-form-label">所属学院</label>
+            <div class="layui-input-block">
+                <select id="school" name="school">
+                    <option value="0">请选择所属学院</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">专业名称</label>
+            <div class="layui-input-block">
+                <input id="majorName" type="text" name="title" placeholder="请输入专业名称" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button id="submit" type="button" class="layui-btn">立即新增</button>
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+<script type="text/javascript" src="./js/jquery-3.4.1.js" th:src="@{/js/jquery-3.4.1.js}"></script>
+<script type="text/javascript" src="./js/Fytx_Tips.js" th:src="@{/js/Fytx_Tips.js}"></script>
+<script type="text/javascript" src="./js/Fytx_Tips_Config.js" th:src="@{/js/Fytx_Tips_Config.js}"></script>
+<script type="text/javascript" src="./js/layui.js" th:src="@{/js/layui.js}"></script>
+<script type="text/javascript">
+    layui.use(['form','element'], function () {
+            form = layui.form//上传
+            , element = layui.element; //元素操作
+
+        $("#submit").click(function () {
+            var schoolId = $("#school option:selected").val();
+            var majorName = $("#majorName").val();
+            if (schoolId==0){
+                $.toast("请选择所属学院",1,true);
+                return false;
+            }
+            if (majorName == "") {
+                $.toast("专业名不能为空", 1, true);
+            }else {
+                $.post("/addMajor",{"schoolId":schoolId,"majorName":majorName},function (data) {
+                    $.toast(data.message,1,false);
+                },"json")
+            }
+
+        });
+
+        inidata();
+        function inidata() {
+            $.getJSON("/findAllSchool", function (arr) {
+                for (var i = 0; i < arr.length; i++) {
+                    $("#school").append("<option value='" + arr[i].schoolId + "'>" + arr[i].schoolName + "</option>")
+                }
+                form.render("select");
+            });
+        }
+    });
+</script>
+</html>

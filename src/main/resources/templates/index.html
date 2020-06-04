@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html  lang="en" xmlns:th="http://www.thymeleaf.org">
+	<head >
+		<meta charset="utf-8" />
+		<title>学生报到管理服务系统</title>
+		<link rel="stylesheet" type="text/css" href="./css/layui.css" th:href="@{/css/layui.css}" media="all"/>
+		<link rel="stylesheet" type="text/css" href="./css/Fytx_Tips.css" th:href="@{/css/Fytx_Tips.css}" media="all"/>
+	</head>
+	<body>
+		<div class="layui-container">
+			<div class="layui-row">
+				<div class="layui-col-lg12" 
+				style="background-color: #93D1FF; 
+				min-width: 800px;
+				min-height: 600px;
+				border: 0px;
+				border-radius: 25px;
+				margin-top: 25px;
+				box-shadow: -5px -5px 5px 5px #93D1FF;
+				">
+					<div id="top"
+					style="background-color: #01AAED;
+					border: 20px;
+					border-radius: 25px;
+					height: 100px;
+					width: 350px;
+					margin: 50px auto;
+					font-size: 50px;
+					text-align: center;
+					line-height: 90px;
+					">
+					皇家科技学院
+					</div>
+					<div id="below" style="width: 350px;
+					height: 400px;
+					border: 0px;
+					border-radius: 25px;
+					margin: 50px auto;
+					">
+						<form action="#" method="post" class="layui-form" id="login" style="text-align: center;line-height: 60px;">
+							<i class="layui-icon layui-icon-friends" style="font-size: 40px;"></i>
+							<input type="text" value="201600000001" id="username" name="username" placeholder="请输入用户名" class="layui-input" style="margin-top: 1px;" /><br />
+							<input type="password" value="239976" id="password" name="password" placeholder="请输入密码" class="layui-input" style="margin-top: -30px;"/>
+							<span style="color: red;line-height: 0px;">PS:用户名默认身份证后六位</span><br />
+							<select id="logintype" name="logintype" lay-verify="required">
+								<option value="0">登陆类型选择</option>
+								<option value="1">学生登录</option>
+								<option value="2" selected>教职工登录</option>
+							</select>
+							<input type="button" id="loginbtn" class="layui-btn layui-btn-lg layui-btn-radius layui-btn-normal" style="width: 150px;" value="登录"/>
+							<input type="reset" class="layui-btn layui-btn-lg layui-btn-radius layui-btn-normal" style="width: 150px;"/>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript" src="./js/jquery-3.4.1.js" th:src="@{/js/jquery-3.4.1.js}"></script>
+	<script type="text/javascript" src="./js/layui.all.js" th:src="@{/js/layui.js}"></script>
+	<script type="text/javascript" src="./js/Fytx_Tips.js" th:src="@{/js/Fytx_Tips.js}"></script>
+	<script type="text/javascript" src="./js/Fytx_Tips_Config.js" th:src="@{/js/Fytx_Tips_Config.js}"></script>
+	<script type="text/javascript"  src="http://pv.sohu.com/cityjson?ie=utf-8"></script>
+	<script type="text/javascript" >
+		$(function(){
+			$("#username").blur(function(){
+				var username = $(this).val();
+				var reuser = /^[0-9]{10,15}$/;
+				if($(this).val()==""||$(this).val()==null){
+					$.toast("用户名不能为空",1,true);
+				}else if(reuser.test(username)==false){
+					$.toast("请输入正确的用户名",1,true);
+				}
+			});
+			$("#loginbtn").click(function () {
+				if ($("#logintype").val() == 0){
+					$.toast("请选择登陆类型",1,true);
+				}else {
+					$.post("/login",$("#login").serialize(),function(data){
+						if (data.status==200){
+							var ip = returnCitySN.cip;
+							$.get("/insertLoginmsg",{"ip":ip},function (data) {
+								if (data.status == 400){
+									$.toast(date.message,1,true);
+									window.location.href = "/backlogin";
+								}else if (data.status == 200){
+									window.location.href = "/service";
+								}
+							},"json");
+						}else{
+							$.toast(data.message,1,true);
+						}
+					},"json");
+				}
+			});
+		});
+	</script>
+	<script type="text/javascript">
+		layui.use('form',function () {
+			var form = layui.form;
+
+			form.render();
+		})
+	</script>
+	<!-- <script type="text/javascript">
+		var ip=returnCitySN.cip;
+		alert(ip);
+	</script> -->
+</html>

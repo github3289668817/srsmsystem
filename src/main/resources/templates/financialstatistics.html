@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>学生报到管理服务系统</title>
+    <link type="text/css" rel="stylesheet" href="../css/layui.css" th:href="@{/css/layui.css}" media="all">
+</head>
+<body>
+<div id="filtercriteria" style="width: 800px;text-align: center;margin: auto;margin-top: 30px;">
+    <form id="filter" class="layui-form" action="#" method="post">
+        <div class="layui-input-inline" style="width: 150px">
+            <select id="school" name="school" lay-filter="school">
+                <option value="0">请选择一个学院</option>
+            </select>
+        </div>
+        <div class="layui-input-inline" style="width: 150px">
+            <select id="major" name="major" lay-filter="major">
+                <option value="0">请选择一个专业</option>
+            </select>
+        </div>
+        <div class="layui-input-inline" style="width: 150px">
+            <select id="class" name="class" lay-filter="class">
+                <option value="0">请选择一个班级</option>
+            </select>
+        </div>
+        <div class="layui-input-inline" style="width: 150px">
+            <button id="submit" type="button" class="layui-btn" lay-submit="">立即查询</button>
+        </div>
+    </form>
+</div>
+<div style="width: 800px;margin: auto;margin-top: 20px">
+    <table class="layui-hide" id="students" lay-filter="test"></table>
+</div>
+</body>
+<script type="text/javascript" src="./js/layui.js" th:src="@{/js/layui.js}"></script>
+<script type="text/javascript" src="/js/jquery-3.4.1.js" th:src="@{/js/jquery-3.4.1.js}"></script>
+<script type="text/javascript">
+    layui.use(['laypage','form', 'layer', 'table', 'upload', 'element'], function () {
+        laypage = layui.laypage //分页
+            , layer = layui.layer //弹层
+            , table = layui.table //表格
+            , upload = layui.upload
+            ,form = layui.form//上传
+            , element = layui.element; //元素操作
+
+        getstudents(0,0,0);
+        function getstudents(schoolId,majorId,classId){
+            //执行一个 table 实例
+            table.render({
+                elem: '#students'
+                // , height: 800
+                ,width: 800
+                , url: '/getAllStudentByFilter'+"/"+schoolId+"/"+majorId+"/"+classId //数据接口
+                , title: '学生统计表'
+                , page: true //开启分页
+                ,even: true
+                ,limit: 5
+                ,method: "get"
+                ,limits: [5,10,20,50,100]
+                ,response: {
+                    statusCode: 200 //重新规定成功的状态码为 200，table 组件默认为 0
+                }
+                ,parseData: function(res){ //将原始数据解析成 table 组件所规定的数据
+                    return {
+                        "code": res.status, //解析接口状态
+                        "msg": res.message, //解析提示文本
+                        "count": res.count, //解析数据长度
+                        "data": res.item //解析数据列表
+                    };
+                }
+                , cols: [
+                    [ //表头
+                        {field: 'studentNo', title: '学号', sort: true}
+                        , {field: 'studentName', title: '姓名'}
+                        , {field: 'schoolName', title: '学院'}
+                        , {field: 'majorName', title: '专业'}
+                        , {field: 'className', title: '班级'}
+                        , {field: 'studentSemesterMoney', title: '缴纳学费',sort: true,totalRow: true}
+                    ]
+                ]
+            });
+        }
+
+        $("#submit").click(function () {
+            var schoolId = $("#school option:selected").val();
+            var majorId = $("#major option:selected").val();
+            var classId = $("#class option:selected").val();
+            getstudents(schoolId,majorId,classId);
+
+        })
+
+        inidata();
+        function inidata() {
+            $.getJSON("/findAllSchool", function (arr) {
+                for (var i = 0; i < arr.length; i++) {
+                    $("#school").append("<option value='" + arr[i].schoolId + "'>" + arr[i].schoolName + "</option>")
+                }
+                form.render("select");
+            });
+        }
+        form.on("select(school)",function (school) {
+            var schoolId = school.value;
+            $.getJSON("/findMajorBySchoolId/"+schoolId,function (arr) {
+                $("#major").empty();
+                $("#major").append("<option + selected + value='"+ "0" +"'>"+ "请选择一个专业" +"</option>");
+                $("#class").empty();
+                $("#class").append("<option + selected + value='"+ "0" +"'>" + "请选择一个班级" + "</option>");
+                form.render("select");
+                for (var i = 0; i < arr.length; i++) {
+                    $("#major").append("<option value='"+ arr[i].majorId +"'>"+ arr[i].majorName +"</option>");
+                }
+                form.render("select");
+            });
+        });
+        form.on("select(major)",function (major) {
+            var majorId = major.value;
+            $.getJSON("/findClassByMajorId/"+majorId,function (arr) {
+                $("#class").empty();
+                $("#class").append("<option + selected + value='"+ "0" +"'>" + "请选择一个班级" + "</option>");
+                form.render("select");
+                for (var i = 0; i < arr.length; i++) {
+                    $("#class").append("<option value='"+ arr[i].classId +"'>"+ arr[i].className +"</option>");
+                }
+                form.render("select");
+            });
+        });
+    });
+</script>
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+</html>

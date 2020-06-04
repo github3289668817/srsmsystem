@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>信息确认</title>
+    <link rel="stylesheet" type="text/css" href="../layui/css/layui.css" th:src="@{/layui/css/layui.css}">
+    <link rel="stylesheet" type="text/css" href="../css/Fytx_Tips.css" th:href="@{/css/Fytx_Tips.css}" media="all"/>
+</head>
+<body>
+<div style="margin: auto">
+    <form id="form" class="layui-form">
+        <div style="margin-top: 15px" class="layui-form-item">
+            <label class="layui-form-label">学号：</label>
+            <div class="layui-input-block">
+                <input th:value="${student.studentNo}" type="text" style="width: 280px" disabled name="studentNo" required  lay-verify="required" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">姓名：</label>
+            <div class="layui-input-block">
+                <input th:value="${student.studentName}" type="text" style="width: 280px" disabled  name="studentName" required  lay-verify="required" autocomplete="off" class="layui-input" >
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">学院：</label>
+            <div class="layui-input-block">
+                <input th:value="${student.schoolName}" type="text" style="width: 280px" disabled  name="schoolName" required  lay-verify="required" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">专业：</label>
+            <div class="layui-input-block">
+                <input th:value="${student.majorName}" type="text" style="width: 280px" disabled  name="majorName" required  lay-verify="required" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">班级：</label>
+            <div class="layui-input-block">
+                <input th:value="${student.className}" type="text" style="width: 280px" disabled  name="className" required  lay-verify="required" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">学费：</label>
+            <div class="layui-input-block">
+                <input th:value="${student.money}" id="money" type="text" style="width: 280px" disabled  name="money" required  lay-verify="required" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">缴费：</label>
+            <div class="layui-input-block">
+                <input type="text" style="width: 280px" id="moneyPay" name="moneyPay" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button type="button" id="btn" class="layui-btn" style="width: 200px" lay-submit lay-filter="formDemo">确认缴费</button>
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+<script type="text/javascript" src="../js/jquery-3.4.1.js" th:src="@{/js/jquery-3.4.1.js}"></script>
+<script type="text/javascript" src="../layui/layui.js" th:src="@{/layui/layui.js}"></script>
+<script type="text/javascript" src="../js/Fytx_Tips.js" th:src="@{/js/Fytx_Tips.js}"></script>
+<script type="text/javascript" src="../js/Fytx_Tips_Config.js" th:src="@{/js/Fytx_Tips_Config.js}"></script>
+<script type="text/javascript">
+    $(function () {
+        $("#btn").click(function () {
+           var money =  $("#money").val();
+           var moneyPay = $("#moneyPay").val();
+           var reuser = /(^[1-9]\d*(\.\d{1,2})?$)|(^0(\.\d{1,2})?$)/;
+           if (moneyPay == ""){
+               $.toast("请输入金额",1,true);
+           }else {
+               if (reuser.test(moneyPay)==false){
+                   $.toast("非法输入",1,true);
+               }else {
+                   if (parseFloat(moneyPay) != parseFloat(money)){
+                       $.toast("缴纳费用与所需费用不符",1,true);
+                   }else {
+                       var studentNo = $("input[name='studentNo']").val();
+                       var moneyPay = $("input[name='moneyPay']").val();
+                       alert(studentNo);
+                       $.post("/paythetuition",{"studentNo":studentNo,"moneyPay":moneyPay},function (date) {
+                           if(date.status==200){
+                               $.toast("缴费成功",1,true);
+                               setTimeout(function () {
+                                   var index=parent.layer.getFrameIndex(window.name); //获取当前窗口的name
+                                   parent.layer.close(index);		//关闭窗口
+                               }, 1000);
+                           }else {
+                               $.toast("系统错误，请重试",1,true);
+                           }
+                       },"json");
+                   }
+               }
+           }
+        });
+    })
+    layui.use('form',function () {
+        var form = layui.form;
+
+        form.render;
+    })
+</script>
+</html>

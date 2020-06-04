@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>学生报到管理服务系统</title>
+    <link rel="stylesheet" href="../css/layui.css" th:src="@{/css/layui.css}">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        <div class="layui-logo">系统后台</div>
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item">
+                <a href="javascript:;">
+                    <img src="http://a0.att.hudong.com/16/12/01300535031999137270128786964.jpg" class="layui-nav-img"><span th:text="${session.user.getUserName()}"></span>
+                </a>
+                <dl class="layui-nav-child">
+                    <dd><a href="/toChangePassword" target="change">修改密码</a></dd>
+                    <dd><a href="/loginmsg" target="change">登录信息</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item"><a href="javascript:;">退出</a></li>
+        </ul>
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            <ul class="layui-nav layui-nav-tree"  lay-filter="test">
+                <li class="layui-nav-item">
+                    <a href="javascript:;">学生管理</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="/studentstatistics" target="change">学生详情</a></dd>
+                        <dd><a href="/studentTu" target="change">学生统计</a></dd>
+                        <dd><a href="javascript:;" target="change">添加学生</a></dd>
+                        <dd><a href="javascript:;" target="change">新生导入</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a href="javascript:;">宿舍管理</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:;" target="change">宿舍统计</a></dd>
+                        <dd><a href="javascript:;" target="change">新增宿舍</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a href="javascript:;">财务管理</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="/financialstatistics" target="change">财务详情</a></dd>
+                        <dd><a href="/tuitiontu" target="change">财务统计</a></dd>
+                        <dd><a href="/tuitioncollection" target="change">学费收取</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a href="javascript:;">职工管理</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="/empstatistics" target="change">职工统计</a></dd>
+                        <dd><a href="/toAddEmp" target="change">新增职工</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a href="javascript:;">学院管理</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="/schoolstatistics" target="change">学院统计</a></dd>
+                        <dd><a href="/addschool" target="change">新增学院</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a href="javascript:;">专业管理</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="/majorstatistics" target="change">专业统计</a></dd>
+                        <dd><a href="/addmajor" target="change">新增专业</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a href="javascript:;">班级管理</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="/classstatistics" target="change">班级统计</a></dd>
+                        <dd><a href="/addclass" target="change">新增班级</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item"><a href="/checkin" target="change">入学报到</a></li>
+            </ul>
+        </div>
+</div>
+
+    <div class="layui-body">
+<!--        src默认跳转的页面地址-->
+        <iframe src="/loginmsg" scrolling="auto" frameborder="0" width="100%" height="99%" name="change"></iframe>
+    </div>
+
+    <div class="layui-footer">
+        © ValentinoXiong - 版权
+    </div>
+</div>
+<script type="text/javascript" src="./js/jquery-3.4.1.js" th:src="@{/js/jquery-3.4.1.js}"></script>
+<script type="text/javascript" src="./js/layui.all.js" th:src="@{/js/layui.js}"></script>
+<script type="text/javascript" src="./js/Fytx_Tips.js" th:src="@{/js/Fytx_Tips.js}"></script>
+<script type="text/javascript" src="./js/Fytx_Tips_Config.js" th:src="@{/js/Fytx_Tips_Config.js}"></script>
+<script type="text/javascript"  src="http://pv.sohu.com/cityjson?ie=utf-8"></script>
+<script type="text/javascript">
+    //JavaScript代码区域
+    layui.use('element', function(){
+        var element = layui.element;
+    });
+</script>
+</body>
+</html>

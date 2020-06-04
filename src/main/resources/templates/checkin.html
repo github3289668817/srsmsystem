@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>学生报到</title>
+    <link rel="stylesheet" type="text/css" href="../layui/css/layui.css" th:src="@{/layui/css/layui.css}">
+    <link rel="stylesheet" type="text/css" href="../css/Fytx_Tips.css" th:href="@{/css/Fytx_Tips.css}">
+</head>
+<body>
+    <div style="margin-top: 100px;margin-left: 80px">
+        <form class="layui-form" action="">
+            <div class="layui-form-item">
+                <label class="layui-form-label">学号：</label>
+                <div class="layui-input-block">
+                    <input th:value="${student.studentNo}" style="width: 300px" disabled type="text" name="studentNo" required  lay-verify="required" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">姓名：</label>
+                <div class="layui-input-block">
+                    <input th:value="${student.studentName}" style="width: 300px" disabled type="text" name="studentName" required  lay-verify="required" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">学院：</label>
+                <div class="layui-input-block">
+                    <input th:value="${student.schoolName}" style="width: 300px" disabled type="text" name="schoolName" required  lay-verify="required" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">专业：</label>
+                <div class="layui-input-block">
+                    <input th:value="${student.majorName}" style="width: 300px" disabled type="text" name="majorName" required  lay-verify="required" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">班级：</label>
+                <div class="layui-input-block">
+                    <input th:value="${student.className}" style="width: 300px" disabled type="text" name="className" required  lay-verify="required" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button id="check" style="width: 140px" type="button" class="layui-btn" lay-submit >报到</button>
+                    <button id="pay" style="width: 140px" type="button" class="layui-btn" lay-submit >缴费</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</body>
+<!--<script type="text/javascript" src="../static/layui/layui.js" th:src="@{/static/layui/layui.js}"></script>-->
+<script type="text/javascript" src="../layui/layui.js" th:src="@{/layui/layui.js}"></script>
+<script type="text/javascript" src="../js/jquery-3.4.1.js" th:src="@{/js/jquery-3.4.1.js}"></script>
+<script type="text/javascript" src="../js/Fytx_Tips.js" th:src="@{/js/Fytx_Tips.js}"></script>
+<script type="text/javascript" src="../js/Fytx_Tips_Config.js" th:src="@{/js/Fytx_Tips_Config.js}"></script>
+<script>
+    layui.use(['form','layer'], function(){
+        var form = layui.form;
+        var $ = layui.jquery;
+        var layer = layui.layer;
+
+        $("#pay").click(function () {
+            var studentNo = $("input[name='studentNo']").val();
+            $.post("/isPay",{"studentNo":studentNo},function (data) {
+                if (data.status==200){
+                    var studentNo = $("input[name='studentNo']").val();
+                    window.location.href = "/doPay"+"/"+studentNo;
+                }else {
+                    $.toast(data.message,1,true);
+                }
+            },"json");
+        });
+
+        $("#check").click(function () {
+            var studentNo = $("input[name='studentNo']").val();
+            $.post("/isCheck/"+studentNo,function (data) {
+                if (data.status == 200){
+                    layer.open({
+                        type: 2,
+                        title: '定位报到',
+                        shadeClose: false,
+                        area: ['500px','500px'],
+                        content: "/toCheck"
+                    });
+                }else {
+                    $.toast(data.message,1,true);
+                }
+            },"json");
+        });
+    });
+</script>
+</html>

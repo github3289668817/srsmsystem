@@ -10,5 +10,6 @@ import lombok.NoArgsConstructor;
 public class Dormitory {
 
   private String dormitoryId;
+  private String dormitoryType;
 
 }

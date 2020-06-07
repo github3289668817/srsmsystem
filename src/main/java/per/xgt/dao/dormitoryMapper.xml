@@ -19,10 +19,10 @@
             AND a.dormitoryType = '男'
         </if>
         <if test="param2 == 0">
-            AND a.studentCount >= 5
+            AND 5 > a.studentCount
         </if>
         <if test="param2 == 1">
-            AND 5 > a.studentCount.
+            AND a.studentCount >= 5
         </if>
     </select>
 

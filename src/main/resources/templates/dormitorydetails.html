@@ -17,9 +17,9 @@
         </div>
         <div class="layui-input-inline" style="width: 150px">
             <select id="isFull" name="isFull" lay-filter="isFull">
-                <option value="2">是否有空床位</option>
-                <option value="0">没有空床位</option>
-                <option value="1">有空床位</option>
+                <option value="2">是否满房</option>
+                <option value="0">否</option>
+                <option value="1">是</option>
             </select>
         </div>
         <div class="layui-input-inline" style="width: 150px">
@@ -28,7 +28,7 @@
     </form>
 </div>
 <div style="width: 800px;margin: auto;margin-top: 20px">
-    <table class="layui-hide" id="dormitorys" lay-filter="dormitorys"></table>
+    <table style="text-align: center" class="layui-hide" id="dormitorys" lay-filter="dormitorys"></table>
 </div>
 </body>
 <script type="text/javascript" src="/layui/layui.js" th:src="@{/layui/layui.js}"></script>
@@ -47,16 +47,16 @@
         function getdormitorys(dormitoryType,isFull){
             //执行一个 table 实例
             table.render({
-                elem: '#students'
+                elem: '#dormitorys'
                 // , height: 800
                 ,width: 800
                 , url: '/getdormitorys'+"/"+dormitoryType+"/"+isFull //数据接口
                 , title: '宿舍详情'
                 , page: true //开启分页
                 ,even: true
-                ,limit: 5
+                ,limit: 10
                 ,method: "get"
-                ,limits: [5,10,20]
+                ,limits: [10,20,50]
                 ,response: {
                     statusCode: 200 //重新规定成功的状态码为 200，table 组件默认为 0
                 }
@@ -77,6 +77,12 @@
                 ]
             });
         }
+
+        $("#submit").click(function () {
+            var dormitoryType = $("#dormitoryType option:selected").val();
+            var isFull = $("#isFull option:selected").val();
+            getdormitorys(dormitoryType,isFull);
+        })
 
     });
 

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>添加学生</title>
+    <link rel="stylesheet" href="/layui/css/layui.css" th:src="@{/layui/css/layui.css}">
+    <link rel="stylesheet" type="text/css" href="./css/Fytx_Tips.css" th:href="@{/css/Fytx_Tips.css}" media="all"/>
+</head>
+<body>
+<div id="form" style="width: 600px;margin: auto;margin-top: 50px">
+    <form class="layui-form" action="">
+        <div class="layui-form-item">
+            <label class="layui-form-label">姓名</label>
+            <div class="layui-input-block">
+                <input style="width: 300px" type="text" name="studentName" required lay-verify="required"
+                       placeholder="请输入学生姓名" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">性别</label>
+            <div class="layui-input-block">
+                <input type="radio" name="studentGender" value="男" title="男" lay-filter="studentGender">
+                <input type="radio" name="studentGender" value="女" title="女" lay-filter="studentGender">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">身份证号码</label>
+            <div class="layui-input-block">
+                <input style="width: 300px" type="text" name="studentCardNo" required lay-verify="required"
+                       placeholder="请输入学生身份证号码" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">所属学院</label>
+            <div style="width: 300px" class="layui-input-block">
+                <select id="studentSchoolId" style="width: 300px" name="studentSchoolId" lay-verify="required"
+                        lay-filter="studentSchoolId">
+                    <option value="">请选择所属学院</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">所学专业</label>
+            <div style="width: 300px" class="layui-input-block">
+                <select id="studentMajorId" style="width: 300px" name="studentMajorId" lay-verify="required"
+                        lay-filter="studentMajorId">
+                    <option value="">请选择所学专业</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">所在班级</label>
+            <div style="width: 300px" class="layui-input-block">
+                <select id="studentClassId" style="width: 300px" name="studentClassId" lay-verify="required"
+                        lay-filter="studentClassId">
+                    <option value="">请选择所在班级</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">所住公寓</label>
+            <div style="width: 300px" class="layui-input-block">
+                <select id="studentDormitoryId" name="studentDormitoryId" lay-verify="required" lay-filter="studentDormitoryId">
+                    <option value="">请选择所住公寓</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button style="width: 100px" id="btn" class="layui-btn" type="button" lay-filter="formDemo">立即提交
+                </button>
+                <button style="width: 100px" type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+<script type="text/javascript" src="..//layui/layui.js" th:src="@{/layui/layui.js}"></script>
+<script type="text/javascript" src="/js/jquery-3.4.1.js" th:src="@{/js/jquery-3.4.1.js}"></script>
+<script type="text/javascript" src="./js/Fytx_Tips.js" th:src="@{/js/Fytx_Tips.js}"></script>
+<script type="text/javascript" src="./js/Fytx_Tips_Config.js" th:src="@{/js/Fytx_Tips_Config.js}"></script>
+<script type="text/javascript">
+    layui.use(['form', 'layer', 'element'], function () {
+        var form = layui.form;
+        var $ = layui.jquery;
+        var element = layui.element;
+        var layer = layui.layer;
+
+        initData();
+
+        function initData() {
+            $.getJSON("/findAllSchool", function (arr) {
+                for (var i = 0; i < arr.length; i++) {
+                    $("#studentSchoolId").append("<option value='" + arr[i].schoolId + "'>" + arr[i].schoolName + "</option>")
+                }
+                form.render('select');
+            });
+        }
+
+        form.on("select(studentSchoolId)", function (school) {
+            var schoolId = school.value;
+            $.getJSON("/findMajorBySchoolId/" + schoolId, function (arr) {
+                $("#studentMajorId").empty();
+                $("#studentMajorId").append("<option + selected + value='" + "" + "'>" + "请选择所属专业" + "</option>");
+                $("#studentClassId").empty();
+                $("#studentClassId").append("<option + selected + value='" + "" + "'>" + "请选择所在班级" + "</option>");
+                form.render("select");
+                for (var i = 0; i < arr.length; i++) {
+                    $("#studentMajorId").append("<option value='" + arr[i].majorId + "'>" + arr[i].majorName + "</option>");
+                }
+                form.render("select");
+            });
+        });
+        form.on("select(studentMajorId)", function (major) {
+            var majorId = major.value;
+            $.getJSON("/findClassByMajorId/" + majorId, function (arr) {
+                $("#studentClassId").empty();
+                $("#studentClassId").append("<option + selected + value='" + "" + "'>" + "请选择一个班级" + "</option>");
+                form.render("select");
+                for (var i = 0; i < arr.length; i++) {
+                    $("#studentClassId").append("<option value='" + arr[i].classId + "'>" + arr[i].className + "</option>");
+                }
+                form.render("select");
+            });
+        });
+        form.on("radio(studentGender)", function () {
+            var studentGender = $("input[type='radio']:checked").val();
+            $.getJSON("/findAllDormitorysByGender/" + studentGender, function (arr) {
+                $("#studentDormitoryId").empty();
+                $("#studentDormitoryId").append("<option + selected + value='" + "" + "'>" + "请选择所住公寓" + "</option>");
+                form.render("select");
+                getDormitorysByGender(arr);
+            });
+        });
+        function getDormitorysByGender(arr) {
+            for (var i = 0; i < arr.length; i++) {
+                $("#studentDormitoryId").append("<option value='" + arr[i].dormitoryId + "'>" + arr[i].dormitoryId + "</option>");
+            }
+            form.render("select");
+        }
+
+        $("#btn").click(function () {
+            var studentName = $("input[name='studentName']").val();
+            var studentGender = $("input[type = 'radio']:checked").val();
+            var studentCardNo = $("input[name = 'studentCardNo']").val();
+            var studentSchoolId = $("#studentSchoolId option:selected").val();
+            var studentMajorId = $("#studentMajorId option:selected").val();
+            var studentClassId = $("#studentClassId option:selected").val();
+            var studentDormitoryId = $("#studentDormitoryId option:selected").val();
+            var reName = /^[\u4e00-\u9fa5]{2,4}$/;
+            var reCardNo = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|x)$)/;
+            if (studentName==""||studentName==null){
+                $.toast("学生姓名不能为空",1,true);
+                return false;
+            }else if (reName.test(studentName)==false){
+                $.toast("请输入正确得学生姓名",1,true);
+                return false;
+            }else if (studentGender==""||studentGender==null){
+                $.toast("学生性别为必选项",1,true);
+                return false;
+            }else if (studentCardNo==""||studentCardNo==null){
+                $.toast("身份证号码不能为空",1,true);
+                return false;
+            }else if (reCardNo.test(studentCardNo)==false){
+                $.toast("请填写正确的身份证号码:最后一位如果为x则小写",1,true);
+                return false;
+            }else if(studentSchoolId==""){
+                $.toast("学院为必选项",1,true);
+                return false;
+            }else if(studentMajorId==""){
+                $.toast("专业为必选项",1,true);
+                return false;
+            }else if(studentClassId==""){
+                $.toast("班级为必选项",1,true);
+                return false;
+            }else if(studentDormitoryId==""){
+                $.toast("公寓为必选项",1,true);
+                return false;
+            }
+            $.post("/addOneStudent",{
+                "studentName":studentName,
+                "studentGender":studentGender,
+                "studentCardNo":studentCardNo,
+                "studentSchoolId":studentSchoolId,
+                "studentMajorId":studentMajorId,
+                "studentClassId":studentClassId,
+                "studentDormitoryId":studentDormitoryId
+            },function (data) {
+                // if (data.status==200){
+                    alert("添加成功")
+                // }else {
+                //     $.toast(data.message,1,true);
+                // }
+            },"json");
+        });
+
+    });
+</script>
+</html>

@@ -192,7 +192,7 @@ public class studentController {
 
     @RequestMapping("/addOneStudent")
     @ResponseBody
-    public ResultMessage addOneStudent(
+    public String addOneStudent(
             String studentName,
             String studentGender,
             String studentCardNo,
@@ -210,5 +210,15 @@ public class studentController {
                 studentClassId,
                 studentDormitoryId
         );
+    }
+
+    @RequestMapping("/showaddstudent/{studentNo}")
+    public ModelAndView getAstudentByNewStudentNo(
+            @PathVariable("studentNo") String studentNo
+    ){
+        ModelAndView modelAndView = new ModelAndView("showaddstudent");
+        DtoAddStudent student = studentService.getAstudentByNewStudentNo(studentNo);
+        modelAndView.addObject("student", student);
+        return modelAndView;
     }
 }

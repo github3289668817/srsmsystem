@@ -7,8 +7,8 @@
     <link rel="stylesheet" type="text/css" href="./css/Fytx_Tips.css" th:href="@{/css/Fytx_Tips.css}" media="all"/>
 </head>
 <body>
-<div id="form" style="width: 600px;margin: auto;margin-top: 50px">
-    <form class="layui-form" action="">
+<div style="width: 600px;margin: auto;margin-top: 50px">
+    <form id="form" class="layui-form" action="">
         <div class="layui-form-item">
             <label class="layui-form-label">姓名</label>
             <div class="layui-input-block">
@@ -186,11 +186,18 @@
                 "studentClassId":studentClassId,
                 "studentDormitoryId":studentDormitoryId
             },function (data) {
-                // if (data.status==200){
-                    alert("添加成功")
-                // }else {
-                //     $.toast(data.message,1,true);
-                // }
+                if(data == null){
+                    $.toast("操作过于频繁，请稍后再试",1,true);
+                }else {
+                    $("#form")[0].reset();
+                    layer.open({
+                        type: 2,
+                        title: '确认信息',
+                        shadeClose: false,
+                        area: ['500px','500px'],
+                        content: "/showaddstudent"+"/"+data
+                    });
+                }
             },"json");
         });
 

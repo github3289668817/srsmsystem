@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/layui/css/layui.css" th:src="@{/layui/css/layui.css}">
+</head>
+<body>
+<div style="margin-top: 50px;margin-left: 50px">
+    <form class="layui-form">
+        <div class="layui-form-item">
+            <label class="layui-form-label">学号</label>
+            <div class="layui-input-block">
+                <input disabled th:value="${student.studentNo}" style="width: 250px" type="text" id="empNo" name="empNo" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">姓名</label>
+            <div class="layui-input-block">
+                <input disabled th:value="${student.studentName}" style="width: 250px" type="text" id="empName" name="empName" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">学院</label>
+            <div class="layui-input-block">
+                <input disabled th:value="${student.schoolName}" style="width: 250px" type="text" id="roleName" name="roleName" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">专业</label>
+            <div class="layui-input-block">
+                <input disabled th:value="${student.majorName}" style="width: 250px" type="text" id="departmentName" name="departmentName" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">班级</label>
+            <div class="layui-input-block">
+                <input disabled th:value="${student.className}" style="width: 250px" type="text" id="departmentName" name="departmentName" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button id="btn" type="button" class="layui-btn" lay-submit lay-filter="formDemo">确认</button>
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+<script type="text/javascript" src="/layui/layui.js" th:src="@{/layui/layui.js}"></script>
+<script type="text/javascript" src="/js/jquery-3.4.1.js" th:src="@{/js/jquery-3.4.1.js}"></script>
+<script type="text/javascript">
+    layui.use(['form', 'layer'], function () {
+        var form = layui.form;
+        var $ = layui.jquery;
+        var layer = layui.layer;
+
+        $("#btn").click(function () {
+            var index=parent.layer.getFrameIndex(window.name); //获取当前窗口的name
+            parent.layer.close(index);		//关闭窗口
+        });
+
+    });
+</script>
+</html>

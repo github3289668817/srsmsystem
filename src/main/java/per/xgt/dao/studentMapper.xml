@@ -5,15 +5,16 @@
 
     <insert id="addOneStudent">
         insert into t_student
-        values (#{param1},#{param2},#{param3},#{param4},#{param5},#{param6},null,null,#{param7},#{param8},#{param9},#{param10},0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
+        values (#{param1}, #{param2}, #{param3}, #{param4}, #{param5}, #{param6}, null, null, #{param7}, #{param8},
+                #{param9}, #{param10}, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
     </insert>
 
     <select id="findOneByStudentNo" resultType="per.xgt.pojo.Student">
         select *
         from t_student
         where studentState != 1
-        and studentNo = #{username}
-        and studentPassword = #{password}
+          and studentNo = #{username}
+          and studentPassword = #{password}
     </select>
 
     <select id="findAllStudentByFilter" resultType="per.xgt.pojo.Student">
@@ -36,7 +37,7 @@
     </select>
 
     <select id="getStudentByStudentNo" resultType="per.xgt.pojo.Student">
-        select student.*,school.schoolName,major.majorName,class.className
+        select student.*, school.schoolName, major.majorName, class.className
         from t_student student
                  INNER JOIN t_school school
                             ON student.studentSchoolId = school.schoolId
@@ -48,9 +49,21 @@
     </select>
 
     <select id="studentTu" resultType="per.xgt.dto.DtoStudentTu">
-        SELECT student.studentGender,COUNT(student.studentNo) count
+        SELECT student.studentGender, COUNT(student.studentNo) count
         FROM t_student student
         GROUP BY student.studentGender
+    </select>
+
+    <select id="getAstudentByNewStudentNo" resultType="per.xgt.dto.DtoAddStudent">
+        SELECT student.studentNo, student.studentName, school.schoolName, major.majorName, class.className
+        FROM t_student student
+                 INNER JOIN t_school school
+                            ON student.studentSchoolId = school.schoolId
+                 INNER JOIN t_major major
+                            ON student.studentMajorId = major.majorId
+                 INNER JOIN t_class class
+                            ON student.studentClassId = class.classId
+        WHERE student.studentNo = #{studentNo}
     </select>
 
     <update id="payTuition">
@@ -66,7 +79,9 @@
     </update>
 
     <update id="updateStudentPassword">
-        update t_student set studentPassword = #{param2} where studentNo = #{param1}
+        update t_student
+        set studentPassword = #{param2}
+        where studentNo = #{param1}
     </update>
 
 </mapper>

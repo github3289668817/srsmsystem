@@ -344,7 +344,7 @@ public class studentServiceImpl implements studentService {
     }
 
     @Override
-    public ResultMessage addOneStudent(String studentName, String studentGender, String studentCardNo, int studentSchoolId, int studentMajorId, int studentClassId, String studentDormitoryId) {
+    public String addOneStudent(String studentName, String studentGender, String studentCardNo, int studentSchoolId, int studentMajorId, int studentClassId, String studentDormitoryId) {
         ResultMessage resultMessage = null;
         Calendar instance = Calendar.getInstance();
         String year = String.valueOf(instance.get(Calendar.YEAR));
@@ -357,11 +357,16 @@ public class studentServiceImpl implements studentService {
         int a = userMapper.addUser(studentNo, studentPassword, studentName, 1, studentGender);
         int b = studentmapper.addOneStudent(studentNo,studentPassword,1,studentName,studentGender,studentCardNo,studentSchoolId,studentMajorId,studentClassId,studentDormitoryId);
         if (a>0&&b>0){
-            resultMessage = new ResultMessage(200,"添加成功");
+            return studentNo;
         }else {
-            resultMessage = new ResultMessage(500,"系统发生错误，请联系维修人员");
+            return null;
         }
-        return resultMessage;
     }
+
+    @Override
+    public DtoAddStudent getAstudentByNewStudentNo(String studentNo) {
+        return studentmapper.getAstudentByNewStudentNo(studentNo);
+    }
+
 
 }

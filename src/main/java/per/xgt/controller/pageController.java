@@ -95,4 +95,9 @@ public class pageController {
         return "dormitorydetails";
     }
 
+    @RequestMapping("/addstudentPage")
+    public String addstudent(){
+        return "addstudent";
+    }
+
 }

@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import per.xgt.dao.dormitoryMapper;
 import per.xgt.dto.DtoDormitoryDetails;
 import per.xgt.dto.Result;
+import per.xgt.pojo.Dormitory;
 import per.xgt.service.dormitoryService;
 
 import javax.annotation.Resource;
@@ -33,5 +34,10 @@ public class dormitoryServiceImpl implements dormitoryService {
         Result<DtoDormitoryDetails> result = new Result<>(200,"成功",count,dormitorys);
 
         return result;
+    }
+
+    @Override
+    public List<Dormitory> findAllDormitorysByGender(String studentGender) {
+        return dormitoryMapper.findAllDormitorysByGender(studentGender);
     }
 }

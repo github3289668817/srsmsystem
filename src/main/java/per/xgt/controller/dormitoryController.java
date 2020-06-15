@@ -30,10 +30,12 @@ public class dormitoryController {
     }
 
     @RequestMapping("/findAllDormitorysByGender/{studentGender}")
+    @ResponseBody
     public List<Dormitory> findAllDormitorysByGender(
             @PathVariable("studentGender") String studentGender
     ){
-        return dormitoryService.findAllDormitorysByGender(studentGender);
+        List<Dormitory> allDormitorysByGender = dormitoryService.findAllDormitorysByGender(studentGender);
+        return allDormitorysByGender;
     }
 
 }

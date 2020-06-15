@@ -18,4 +18,6 @@ public interface classMapper {
 
     public int addClass(@Param("className") String className,@Param("majorId") int majorId,@Param("instructorId") String instructorId);
 
+    public int getCountByClassId(int studentClassId);
+
 }

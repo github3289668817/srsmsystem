@@ -27,7 +27,15 @@
     </select>
 
     <select id="findAllDormitorysByGender" resultType="per.xgt.pojo.Dormitory">
-
+        SELECT a.dormitoryId
+        FROM
+        (SELECT dormitory.dormitoryId,dormitory.dormitoryType,COUNT(student.studentNo) studentCount
+        FROM t_dormitory dormitory
+        LEFT JOIN t_student student
+        ON dormitory.dormitoryId = student.studentDormitoryId
+        GROUP BY dormitory.dormitoryId) a
+        WHERE a.dormitoryType = #{studentGender}
+        AND 5 > a.studentCount
     </select>
 
 </mapper>

@@ -27,6 +27,9 @@ public interface studentMapper {
      //查询男女学生人数
     public List<DtoStudentTu> studentTu();
 
+    //修改密码
     public int updateStudentPassword(String userNo, String newPassword);
 
+    //添加一个学生
+    public int addOneStudent(String studentNo, String studentPassword, int i, String studentName, String studentGender, String studentCardNo, int studentSchoolId, int studentMajorId, int studentClassId, String studentDormitoryId);
 }

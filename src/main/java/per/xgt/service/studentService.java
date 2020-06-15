@@ -24,4 +24,7 @@ public interface studentService {
     public ResultMessage check(String studentNo);
 
     public List<DtoStudentTu> studentTu();
+
+    public ResultMessage addOneStudent(String studentName, String studentGender, String studentCardNo, int studentSchoolId, int studentMajorId, int studentClassId, String studentDormitoryId);
+
 }

@@ -3,6 +3,11 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="per.xgt.dao.studentMapper">
 
+    <insert id="addOneStudent">
+        insert into t_student
+        values (#{param1},#{param2},#{param3},#{param4},#{param5},#{param6},null,null,#{param7},#{param8},#{param9},#{param10},0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
+    </insert>
+
     <select id="findOneByStudentNo" resultType="per.xgt.pojo.Student">
         select *
         from t_student

@@ -36,6 +36,12 @@
         WHERE t_class.className = #{className}
     </select>
 
+    <select id="getCountByClassId" resultType="java.lang.Integer">
+        SELECT COUNT(1)
+        FROM t_student
+        WHERE studentClassId = #{studentClassId}
+    </select>
+
     <insert id="addClass">
         insert into t_class
         values (null,#{className},#{majorId},#{instructorId},0)

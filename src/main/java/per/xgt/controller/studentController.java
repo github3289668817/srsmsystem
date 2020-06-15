@@ -189,4 +189,26 @@ public class studentController {
     public List<DtoStudentTu> showStudentTu(){
         return studentService.studentTu();
     }
+
+    @RequestMapping("/addOneStudent")
+    @ResponseBody
+    public ResultMessage addOneStudent(
+            String studentName,
+            String studentGender,
+            String studentCardNo,
+            int studentSchoolId,
+            int studentMajorId,
+            int studentClassId,
+            String studentDormitoryId
+    ){
+        return studentService.addOneStudent(
+                studentName,
+                studentGender,
+                studentCardNo,
+                studentSchoolId,
+                studentMajorId,
+                studentClassId,
+                studentDormitoryId
+        );
+    }
 }

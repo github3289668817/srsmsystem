@@ -1,7 +1,9 @@
 package per.xgt.service.impl;
 
 import org.springframework.stereotype.Service;
+import per.xgt.dao.classMapper;
 import per.xgt.dao.studentMapper;
+import per.xgt.dao.userMapper;
 import per.xgt.dto.*;
 import per.xgt.pojo.Student;
 import per.xgt.service.studentService;
@@ -17,6 +19,12 @@ public class studentServiceImpl implements studentService {
 
     @Resource
     private studentMapper studentmapper;
+
+    @Resource
+    private classMapper classMapper;
+
+    @Resource
+    private userMapper userMapper;
 
     @Override
     public Result findAllStudentByFilter(int schoolId, int majorId, int classId, int register, int pageIndex, int pageSize) {
@@ -333,6 +341,27 @@ public class studentServiceImpl implements studentService {
     @Override
     public List<DtoStudentTu> studentTu(){
         return studentmapper.studentTu();
+    }
+
+    @Override
+    public ResultMessage addOneStudent(String studentName, String studentGender, String studentCardNo, int studentSchoolId, int studentMajorId, int studentClassId, String studentDormitoryId) {
+        ResultMessage resultMessage = null;
+        Calendar instance = Calendar.getInstance();
+        String year = String.valueOf(instance.get(Calendar.YEAR));
+        String major = String.format("%02d", studentMajorId);
+        String HClass = String.format("%02d", studentClassId);
+        int num = classMapper.getCountByClassId(studentClassId);
+        String count = String.format("%02d", num+1);
+        String studentNo = year+major+HClass+count;
+        String studentPassword = studentCardNo.substring(studentCardNo.length()-6);
+        int a = userMapper.addUser(studentNo, studentPassword, studentName, 1, studentGender);
+        int b = studentmapper.addOneStudent(studentNo,studentPassword,1,studentName,studentGender,studentCardNo,studentSchoolId,studentMajorId,studentClassId,studentDormitoryId);
+        if (a>0&&b>0){
+            resultMessage = new ResultMessage(200,"添加成功");
+        }else {
+            resultMessage = new ResultMessage(500,"系统发生错误，请联系维修人员");
+        }
+        return resultMessage;
     }
 
 }

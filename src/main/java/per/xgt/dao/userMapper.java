@@ -15,6 +15,6 @@ public interface userMapper {
     //修改用户密码
     public int updateUserPassword(String userNo, String newPassword);
 
-    public int addUser(String empNo, String empPassword, String empName, int empRoleId, String empGender);
+    public int addUser(String userNo, String userPassword, String userName, int userRoleId, String userGender);
 
 }

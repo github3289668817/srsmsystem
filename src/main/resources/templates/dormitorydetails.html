@@ -82,7 +82,27 @@
             var dormitoryType = $("#dormitoryType option:selected").val();
             var isFull = $("#isFull option:selected").val();
             getdormitorys(dormitoryType,isFull);
-        })
+        });
+
+        table.on('tool(dormitorys)', function(obj){
+            var data = obj.data;
+            if(obj.event === 'detail'){
+                layer.open({
+                    type: 2,
+                    title: data.dormitoryId+"寝室详情",
+                    shadeClose: false,
+                    area: ['600px','500px'],
+                    content: "/showdormitorystudents"+"/"+data.dormitoryId
+                });
+            } else if(obj.event === 'del'){
+                layer.confirm('真的删除行么', function(index){
+                    obj.del();
+                    layer.close(index);
+                });
+            } else if(obj.event === 'edit'){
+                layer.alert('编辑行：<br>'+ JSON.stringify(data))
+            }
+        });
 
     });
 

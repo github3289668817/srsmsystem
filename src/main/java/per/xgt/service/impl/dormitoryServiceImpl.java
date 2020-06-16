@@ -2,6 +2,7 @@ package per.xgt.service.impl;
 
 import org.springframework.stereotype.Service;
 import per.xgt.dao.dormitoryMapper;
+import per.xgt.dto.DtoAddStudent;
 import per.xgt.dto.DtoDormitoryDetails;
 import per.xgt.dto.Result;
 import per.xgt.pojo.Dormitory;
@@ -39,5 +40,13 @@ public class dormitoryServiceImpl implements dormitoryService {
     @Override
     public List<Dormitory> findAllDormitorysByGender(String studentGender) {
         return dormitoryMapper.findAllDormitorysByGender(studentGender);
+    }
+
+    @Override
+    public Result<DtoAddStudent> findAllStudentByDormitoryId(String dormitoryId) {
+        List<DtoAddStudent> students = dormitoryMapper.findAllStudentByDormitoryId(dormitoryId);
+        int count = students.size();
+        Result<DtoAddStudent> retult = new Result<>(200, "成功", count, students);
+        return retult;
     }
 }

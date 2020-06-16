@@ -38,4 +38,16 @@
         AND 5 > a.studentCount
     </select>
 
+    <select id="findAllStudentByDormitoryId" resultType="per.xgt.dto.DtoAddStudent">
+        SELECT student.studentNo,student.studentName,school.schoolName,major.majorName,class.className
+        FROM t_student student
+                 INNER JOIN t_school school
+                            ON student.studentSchoolId = school.schoolId
+                 INNER JOIN t_major major
+                            ON student.studentMajorId = major.majorId
+                 INNER JOIN t_class class
+                            ON student.studentClassId = class.classId
+        WHERE student.studentDormitoryId = #{dormitoryId}
+    </select>
+
 </mapper>

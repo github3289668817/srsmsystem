@@ -368,5 +368,15 @@ public class studentServiceImpl implements studentService {
         return studentmapper.getAstudentByNewStudentNo(studentNo);
     }
 
+    @Override
+    public Result<DtoStudentByClass> findAllStudentsByClassId(int classId, int pageIndex, int pageSize) {
+        List<DtoStudentByClass> Astudents = studentmapper.findAllStudentsByClassId(classId);
+        int pageStart = (pageIndex-1)*pageSize;
+        int pageEnd = pageIndex*pageSize>Astudents.size()?Astudents.size():pageIndex*pageSize;
+        List<DtoStudentByClass> students = Astudents.subList(pageStart, pageEnd);
+        Result<DtoStudentByClass> restult = new Result<>(200, "成功", Astudents.size(), students);
+        return restult;
+    }
+
 
 }

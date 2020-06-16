@@ -11,7 +11,7 @@
     <table class="layui-hide" id="classDetails" lay-filter="test"></table>
 </div>
 </body>
-<script type="text/javascript" src="./js/layui.js" th:src="@{/js/layui.js}"></script>
+<script type="text/javascript" src="/layui/layui.js" th:src="@{/layui/layui.js}"></script>
 <script type="text/javascript" src="/js/jquery-3.4.1.js" th:src="@{/js/jquery-3.4.1.js}"></script>
 <script type="text/javascript">
 
@@ -22,23 +22,24 @@
             , element = layui.element; //元素操作
 
         getclassDetails();
-        function getclassDetails(){
+
+        function getclassDetails() {
             //执行一个 table 实例
             table.render({
                 elem: '#classDetails'
                 // , height: 800
-                ,width: 800
+                , width: 800
                 , url: '/getClassDetails' //数据接口
                 , title: '班级详情表'
                 , page: true //开启分页
-                ,even: true
-                ,limit: 5
-                ,method: "get"
-                ,limits: [5,10,20,50]
-                ,response: {
+                , even: true
+                , limit: 5
+                , method: "get"
+                , limits: [5, 10, 20, 50]
+                , response: {
                     statusCode: 200 //重新规定成功的状态码为 200，table 组件默认为 0
                 }
-                ,parseData: function(res){ //将原始数据解析成 table 组件所规定的数据
+                , parseData: function (res) { //将原始数据解析成 table 组件所规定的数据
                     return {
                         "code": res.status, //解析接口状态
                         "msg": res.message, //解析提示文本
@@ -53,11 +54,32 @@
                         , {field: 'schoolName', title: '所属学院'}
                         , {field: 'majorName', title: '所属专业'}
                         , {field: 'studentCount', title: '学生总数', sort: true}
-                        , {field: 'do',title: '操作',fixed: 'right', width: 165, align: 'center', toolbar: '#barDemo'}
+                        , {field: 'do', title: '操作', fixed: 'right', width: 165, align: 'center', toolbar: '#barDemo'}
                     ]
                 ]
             });
         }
+
+        table.on('tool(test)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'detail') {
+                layer.open({
+                    type: 2,
+                    title: data.className+'班详情',
+                    shadeClose: false,
+                    area: ['550px', '500px'],
+                    content: "/showallstudentsbyclassid" + "/" + data.classId
+                });
+            } else if (obj.event === 'del') {
+                layer.confirm('真的删除行么', function (index) {
+                    obj.del();
+                    layer.close(index);
+                });
+            } else if (obj.event === 'edit') {
+                layer.alert('编辑行：<br>' + JSON.stringify(data))
+            }
+        });
+
     });
 
 </script>

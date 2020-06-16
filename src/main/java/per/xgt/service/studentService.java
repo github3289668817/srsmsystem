@@ -29,4 +29,6 @@ public interface studentService {
 
     public DtoAddStudent getAstudentByNewStudentNo(String studentNo);
 
+    public Result<DtoStudentByClass> findAllStudentsByClassId(int classId, int pageIndex, int pageSize);
+
 }

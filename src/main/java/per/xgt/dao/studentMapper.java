@@ -2,6 +2,7 @@ package per.xgt.dao;
 
 import org.apache.ibatis.annotations.Mapper;
 import per.xgt.dto.DtoAddStudent;
+import per.xgt.dto.DtoStudentByClass;
 import per.xgt.dto.DtoStudentTu;
 import per.xgt.pojo.Student;
 
@@ -36,4 +37,7 @@ public interface studentMapper {
 
     //查询新增的一个学生
     public DtoAddStudent getAstudentByNewStudentNo(String studentNo);
+
+    public List<DtoStudentByClass> findAllStudentsByClassId(int classId);
+
 }

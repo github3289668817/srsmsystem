@@ -66,6 +66,12 @@
         WHERE student.studentNo = #{studentNo}
     </select>
 
+    <select id="findAllStudentsByClassId" resultType="per.xgt.dto.DtoStudentByClass">
+        SELECT s.studentNo,s.studentName,s.studentGender
+        FROM t_student s
+        WHERE s.studentClassId = #{classId}
+    </select>
+
     <update id="payTuition">
         update t_student
         set ${param2} = #{param3}

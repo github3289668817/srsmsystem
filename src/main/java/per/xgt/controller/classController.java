@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 import per.xgt.dto.Result;
 import per.xgt.dto.ResultMessage;
 import per.xgt.pojo.Class;
@@ -39,6 +40,13 @@ public class classController {
     public ResultMessage addClass(String majorId,String instructorId,String className){
         int majorid = Integer.parseInt(majorId);
         return classService.addClass(className, majorid, instructorId);
+    }
+
+    @RequestMapping("/showallstudentsbyclassid/{classId}")
+    public ModelAndView showallstudentsbyclassid(@PathVariable("classId") int classId){
+        ModelAndView modelAndView = new ModelAndView("showallstudentsbyclassid");
+        modelAndView.addObject("classId", classId);
+        return modelAndView;
     }
 
 }

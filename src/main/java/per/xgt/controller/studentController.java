@@ -221,4 +221,14 @@ public class studentController {
         modelAndView.addObject("student", student);
         return modelAndView;
     }
+
+    @RequestMapping("/findAllStudentsByClassId/{classId}")
+    @ResponseBody
+    public Result<DtoStudentByClass> findAllStudentsByClassId(
+            @RequestParam("page") int pageIndex,
+            @RequestParam("limit") int pageSize,
+            @PathVariable("classId") int classId
+    ){
+        return studentService.findAllStudentsByClassId(classId,pageIndex,pageSize);
+    }
 }

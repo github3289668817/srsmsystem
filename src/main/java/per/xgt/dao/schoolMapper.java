@@ -19,4 +19,6 @@ public interface schoolMapper {
 
     public int findSchoolBySchoolName(@Param("schoolName") String schoolName);
 
+    public int findSchoolIdBySchoolName(String schoolName);
+
 }

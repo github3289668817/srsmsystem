@@ -20,4 +20,6 @@ public interface classMapper {
 
     public int getCountByClassId(int studentClassId);
 
+    public int findClassIdByMajorName(int studentMajorId, String year);
+
 }

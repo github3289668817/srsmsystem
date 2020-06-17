@@ -1,6 +1,7 @@
 package per.xgt.dao;
 
 import org.apache.ibatis.annotations.Mapper;
+import per.xgt.pojo.Student;
 import per.xgt.pojo.User;
 
 @Mapper
@@ -17,4 +18,5 @@ public interface userMapper {
 
     public int addUser(String userNo, String userPassword, String userName, int userRoleId, String userGender);
 
+    public void addOneOfListStudent(Student student);
 }

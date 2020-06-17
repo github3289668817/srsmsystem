@@ -8,6 +8,11 @@
         values (#{param1},#{param2},#{param3},#{param4},#{param5},null,0)
     </insert>
 
+    <insert id="addOneOfListStudent" parameterType="per.xgt.pojo.Student">
+        insert into t_user
+        values (#{studentNo},#{studentPassword},#{studentName},#{studentRoleId},#{studentGender},null,0);
+    </insert>
+
     <update id="updateUserPassword">
         update t_user set userPassword = #{param2} where userNo = #{param1}
     </update>

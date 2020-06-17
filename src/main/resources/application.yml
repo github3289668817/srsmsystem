@@ -26,6 +26,11 @@ spring:
       time-between-eviction-runs-millis: 300000
       stat-view-servlet:
         allow: true
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 100MB
+      enabled: true
 mybatis:
 #  mapper-locations: classpath:dao/mapper/*.xml
   type-aliases-package: per.xgt.entity

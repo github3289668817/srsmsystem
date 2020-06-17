@@ -42,6 +42,23 @@
         WHERE studentClassId = #{studentClassId}
     </select>
 
+    <select id="findClassIdByMajorName" resultType="java.lang.Integer">
+        SELECT class.classId studentClassId
+        FROM t_student s
+                 RIGHT JOIN
+             (SELECT c.classId
+              FROM t_class c
+                       INNER JOIN t_major m
+                                  ON c.classMajorId = m.majorId
+              WHERE m.majorId = #{param1}
+                AND c.className LIKE CONCAT('%',#{param2},'%')) class
+             ON s.studentClassId = class.classId
+        GROUP BY class.classId
+        ORDER BY COUNT(s.studentNo) ASC
+        LIMIT 1
+
+    </select>
+
     <insert id="addClass">
         insert into t_class
         values (null,#{className},#{majorId},#{instructorId},0)

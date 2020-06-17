@@ -1,9 +1,7 @@
 package per.xgt.service.impl;
 
 import org.springframework.stereotype.Service;
-import per.xgt.dao.classMapper;
-import per.xgt.dao.studentMapper;
-import per.xgt.dao.userMapper;
+import per.xgt.dao.*;
 import per.xgt.dto.*;
 import per.xgt.pojo.Student;
 import per.xgt.service.studentService;
@@ -25,6 +23,15 @@ public class studentServiceImpl implements studentService {
 
     @Resource
     private userMapper userMapper;
+
+    @Resource
+    private majorMapper majorMapper;
+
+    @Resource
+    private schoolMapper schoolMapper;
+
+    @Resource
+    private dormitoryMapper dormitoryMapper;
 
     @Override
     public Result findAllStudentByFilter(int schoolId, int majorId, int classId, int register, int pageIndex, int pageSize) {
@@ -380,10 +387,48 @@ public class studentServiceImpl implements studentService {
 
     @Override
     public void addStudents(List<Student> students) {
+        String studentNo;
+        String studentPassword;
+        int studentRoleId;
+        String studentName;
+        String studentGender;
+        String studentCardNo;
+        int studentSchoolId;
+        int studentMajorId;
+        int studentClassId;
+        String studentDormitoryId;
+        String majorId;
+        String HClass;
+        String count;
+        int num;
+        Calendar instance = Calendar.getInstance();
+        String year = String.valueOf(instance.get(Calendar.YEAR));
         for (Student student:students) {
-            System.out.println(student);
+            String majorName = student.getMajorName();
+            studentMajorId = majorMapper.findMajorIdByMajorName(majorName);
+            studentClassId = classMapper.findClassIdByMajorName(studentMajorId,year);
+            majorId = String.format("%02d", studentMajorId);
+            HClass = String.format("%02d", studentClassId);
+            num = classMapper.getCountByClassId(studentClassId);
+            count = String.format("%02d", num+1);
+            studentNo = year+majorId+HClass+count;
+            studentCardNo = student.getStudentCardNo();
+            studentPassword = studentCardNo.substring(studentCardNo.length()-6);
+            studentRoleId = 1;
+            studentName = student.getStudentName();
+            studentGender = student.getStudentGender();
+            studentSchoolId = schoolMapper.findSchoolIdBySchoolName(student.getSchoolName());
+            studentDormitoryId =dormitoryMapper.findDormitoryIdByStudentGenderAndCount(studentGender);
+            student.setStudentNo(studentNo);
+            student.setStudentPassword(studentPassword);
+            student.setStudentRoleId(studentRoleId);
+            student.setStudentSchoolId(studentSchoolId);
+            student.setStudentMajorId(studentMajorId);
+            student.setStudentClassId(studentClassId);
+            student.setStudentDormitoryId(studentDormitoryId);
+            userMapper.addOneOfListStudent(student);
+            studentmapper.addOneOfListStudent(student);
         }
     }
-
 
 }

@@ -50,4 +50,15 @@
         WHERE student.studentDormitoryId = #{dormitoryId}
     </select>
 
+    <select id="findDormitoryIdByStudentGenderAndCount" resultType="java.lang.String">
+        SELECT d.dormitoryId
+        FROM t_student s
+                 RIGHT JOIN t_dormitory d
+                            ON s.studentDormitoryId = d.dormitoryId
+        WHERE d.dormitoryType = #{studentGender}
+        GROUP BY d.dormitoryId
+        ORDER BY COUNT(s.studentNo) ASC
+        LIMIT 1
+    </select>
+
 </mapper>

@@ -19,4 +19,6 @@ public interface majorMapper {
 
     public List<Major> findAllMajor();
 
+    public int findMajorIdByMajorName(String majorName);
+
 }

@@ -40,4 +40,5 @@ public interface studentMapper {
 
     public List<DtoStudentByClass> findAllStudentsByClassId(int classId);
 
+    public void addOneOfListStudent(Student student);
 }

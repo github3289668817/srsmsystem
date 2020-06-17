@@ -16,4 +16,6 @@ public interface dormitoryMapper {
 
     public List<DtoAddStudent> findAllStudentByDormitoryId(String dormitoryId);
 
+    public String findDormitoryIdByStudentGenderAndCount(String studentGender);
+
 }

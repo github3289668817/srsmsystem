@@ -9,6 +9,11 @@
                 #{param9}, #{param10}, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
     </insert>
 
+    <insert id="addOneOfListStudent" parameterType="per.xgt.pojo.Student">
+        insert into t_student
+        values (#{studentNo},#{studentPassword},#{studentRoleId},#{studentName},#{studentGender},#{studentCardNo},null,null,#{studentSchoolId},#{studentMajorId},#{studentClassId},#{studentDormitoryId},0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+    </insert>
+
     <select id="findOneByStudentNo" resultType="per.xgt.pojo.Student">
         select *
         from t_student

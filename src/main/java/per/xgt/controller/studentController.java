@@ -240,8 +240,7 @@ public class studentController {
     }
 
     @RequestMapping("/importExcel")
-    @ResponseBody
-    public void importExcel(MultipartFile mFile){
+    public String importExcel(MultipartFile mFile){
         List<Student> students = new ArrayList<>();
         InputStream inputStream = null;
         Student s  = null;
@@ -293,5 +292,6 @@ public class studentController {
             }
         }
         studentService.addStudents(students);
+        return "studentstatistics";
     }
 }

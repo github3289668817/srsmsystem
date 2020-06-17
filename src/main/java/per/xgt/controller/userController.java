@@ -53,4 +53,10 @@ public class userController {
         return loginService.changePassword(oldPassword,newPassword,user);
     }
 
+    @RequestMapping("/loginout")
+    public String loginout(HttpSession session){
+        session.removeAttribute("user");
+        return "index";
+    }
+
 }

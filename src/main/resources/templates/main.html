@@ -20,7 +20,7 @@
                     <dd><a href="/loginmsg" target="change">登录信息</a></dd>
                 </dl>
             </li>
-            <li class="layui-nav-item"><a href="javascript:;">退出</a></li>
+            <li class="layui-nav-item"><a href="/loginout">退出</a></li>
         </ul>
     </div>
 
@@ -29,57 +29,66 @@
             <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
             <ul class="layui-nav layui-nav-tree"  lay-filter="test">
                 <li class="layui-nav-item">
-                    <a href="javascript:;">学生管理</a>
+                    <a th:if="${session.user.userRoleId==5}" href="javascript:;">学生管理</a>
+                    <a th:if="${session.user.userRoleId==2}" href="javascript:;">学生管理</a>
                     <dl class="layui-nav-child">
-                        <dd><a href="/studentstatistics" target="change">学生详情</a></dd>
-                        <dd><a href="/studentTu" target="change">学生统计</a></dd>
-                        <dd><a href="/addstudentPage" target="change">添加学生</a></dd>
-                        <dd><a href="/studentbatch" target="change">新生导入</a></dd>
+                        <dd th:if="${session.user.userRoleId==5}"><a href="/studentstatistics" target="change">学生详情</a></dd>
+                        <dd th:if="${session.user.userRoleId==2}"><a href="/studentstatistics" target="change">学生详情</a></dd>
+                        <dd th:if="${session.user.userRoleId==5}"><a href="/studentTu" target="change">学生统计</a></dd>
+                        <dd th:if="${session.user.userRoleId==2}"><a href="/studentTu" target="change">学生统计</a></dd>
+                        <dd th:if="${session.user.userRoleId==5}"><a href="/addstudentPage" target="change">添加学生</a></dd>
+                        <dd th:if="${session.user.userRoleId==5}"><a href="/studentbatch" target="change">新生导入</a></dd>
                     </dl>
                 </li>
                 <li class="layui-nav-item">
-                    <a href="javascript:;">宿舍管理</a>
+                    <a th:if="${session.user.userRoleId==4}" href="javascript:;">宿舍管理</a>
+                    <a th:if="${session.user.userRoleId==5}" href="javascript:;">宿舍管理</a>
                     <dl class="layui-nav-child">
-                        <dd><a href="/dormitorydetails" target="change">宿舍详情</a></dd>
+                        <dd th:if="${session.user.userRoleId==4}"><a href="/dormitorydetails" target="change">宿舍详情</a></dd>
+                        <dd th:if="${session.user.userRoleId==5}"><a href="/dormitorydetails" target="change">宿舍详情</a></dd>
                     </dl>
                 </li>
                 <li class="layui-nav-item">
-                    <a href="javascript:;">财务管理</a>
+                    <a th:if="${session.user.userRoleId==3}" href="javascript:;">财务管理</a>
+                    <a th:if="${session.user.userRoleId==5}" href="javascript:;">财务管理</a>
                     <dl class="layui-nav-child">
-                        <dd><a href="/financialstatistics" target="change">财务详情</a></dd>
-                        <dd><a href="/tuitiontu" target="change">财务统计</a></dd>
-                        <dd><a href="/tuitioncollection" target="change">学费收取</a></dd>
+                        <dd th:if="${session.user.userRoleId==3}"><a href="/financialstatistics" target="change">财务详情</a></dd>
+                        <dd th:if="${session.user.userRoleId==3}"><a href="/tuitiontu" target="change">财务统计</a></dd>
+                        <dd th:if="${session.user.userRoleId==3}"><a href="/tuitioncollection" target="change">学费收取</a></dd>
+                        <dd th:if="${session.user.userRoleId==5}"><a href="/financialstatistics" target="change">财务详情</a></dd>
+                        <dd th:if="${session.user.userRoleId==5}"><a href="/tuitiontu" target="change">财务统计</a></dd>
+                        <dd th:if="${session.user.userRoleId==5}"><a href="/tuitioncollection" target="change">学费收取</a></dd>
                     </dl>
                 </li>
                 <li class="layui-nav-item">
-                    <a href="javascript:;">职工管理</a>
+                    <a th:if="${session.user.userRoleId==5}" href="javascript:;">职工管理</a>
                     <dl class="layui-nav-child">
-                        <dd><a href="/empstatistics" target="change">职工统计</a></dd>
-                        <dd><a href="/toAddEmp" target="change">新增职工</a></dd>
+                        <dd th:if="${session.user.userRoleId==5}"><a href="/empstatistics" target="change">职工统计</a></dd>
+                        <dd th:if="${session.user.userRoleId==5}"><a href="/toAddEmp" target="change">新增职工</a></dd>
                     </dl>
                 </li>
                 <li class="layui-nav-item">
-                    <a href="javascript:;">学院管理</a>
+                    <a th:if="${session.user.userRoleId==5}" href="javascript:;">学院管理</a>
                     <dl class="layui-nav-child">
-                        <dd><a href="/schoolstatistics" target="change">学院统计</a></dd>
-                        <dd><a href="/addschool" target="change">新增学院</a></dd>
+                        <dd th:if="${session.user.userRoleId==5}"><a href="/schoolstatistics" target="change">学院统计</a></dd>
+                        <dd th:if="${session.user.userRoleId==5}"><a href="/addschool" target="change">新增学院</a></dd>
                     </dl>
                 </li>
                 <li class="layui-nav-item">
-                    <a href="javascript:;">专业管理</a>
+                    <a th:if="${session.user.userRoleId==5}" href="javascript:;">专业管理</a>
                     <dl class="layui-nav-child">
-                        <dd><a href="/majorstatistics" target="change">专业统计</a></dd>
-                        <dd><a href="/addmajor" target="change">新增专业</a></dd>
+                        <dd th:if="${session.user.userRoleId==5}"><a href="/majorstatistics" target="change">专业统计</a></dd>
+                        <dd th:if="${session.user.userRoleId==5}"><a href="/addmajor" target="change">新增专业</a></dd>
                     </dl>
                 </li>
                 <li class="layui-nav-item">
-                    <a href="javascript:;">班级管理</a>
+                    <a th:if="${session.user.userRoleId==5}" href="javascript:;">班级管理</a>
                     <dl class="layui-nav-child">
-                        <dd><a href="/classstatistics" target="change">班级统计</a></dd>
-                        <dd><a href="/addclass" target="change">新增班级</a></dd>
+                        <dd th:if="${session.user.userRoleId==5}"><a href="/classstatistics" target="change">班级统计</a></dd>
+                        <dd th:if="${session.user.userRoleId==5}"><a href="/addclass" target="change">新增班级</a></dd>
                     </dl>
                 </li>
-                <li class="layui-nav-item"><a href="/checkin" target="change">入学报到</a></li>
+                <li th:if="${session.user.userRoleId==1}" class="layui-nav-item"><a href="/checkin" target="change">入学报到</a></li>
             </ul>
         </div>
 </div>

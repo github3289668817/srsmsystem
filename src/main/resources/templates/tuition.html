@@ -80,7 +80,6 @@
                    }else {
                        var studentNo = $("input[name='studentNo']").val();
                        var moneyPay = $("input[name='moneyPay']").val();
-                       alert(studentNo);
                        $.post("/paythetuition",{"studentNo":studentNo,"moneyPay":moneyPay},function (date) {
                            if(date.status==200){
                                $.toast("缴费成功",1,true);

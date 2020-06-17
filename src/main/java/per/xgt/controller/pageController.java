@@ -100,4 +100,9 @@ public class pageController {
         return "addstudent";
     }
 
+    @RequestMapping("/studentbatch")
+    public String studentbatch(){
+        return "studentbatch";
+    }
+
 }

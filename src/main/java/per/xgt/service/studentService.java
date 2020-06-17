@@ -1,6 +1,7 @@
 package per.xgt.service;
 
 import per.xgt.dto.*;
+import per.xgt.pojo.Student;
 
 import java.util.List;
 
@@ -30,5 +31,7 @@ public interface studentService {
     public DtoAddStudent getAstudentByNewStudentNo(String studentNo);
 
     public Result<DtoStudentByClass> findAllStudentsByClassId(int classId, int pageIndex, int pageSize);
+
+    public void addStudents(List<Student> students);
 
 }

@@ -378,5 +378,12 @@ public class studentServiceImpl implements studentService {
         return restult;
     }
 
+    @Override
+    public void addStudents(List<Student> students) {
+        for (Student student:students) {
+            System.out.println(student);
+        }
+    }
+
 
 }

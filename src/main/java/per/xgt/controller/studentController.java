@@ -5,13 +5,19 @@ import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.request.AlipayTradePagePayRequest;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import per.xgt.dto.*;
+import per.xgt.pojo.Student;
 import per.xgt.pojo.User;
 import per.xgt.service.studentService;
 import per.xgt.service.userService;
@@ -22,6 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
 
 @Controller
@@ -230,5 +237,61 @@ public class studentController {
             @PathVariable("classId") int classId
     ){
         return studentService.findAllStudentsByClassId(classId,pageIndex,pageSize);
+    }
+
+    @RequestMapping("/importExcel")
+    @ResponseBody
+    public void importExcel(MultipartFile mFile){
+        List<Student> students = new ArrayList<>();
+        InputStream inputStream = null;
+        Student s  = null;
+        try {
+            inputStream = mFile.getInputStream();
+            HSSFWorkbook wb = new HSSFWorkbook(inputStream);
+            HSSFSheet sheet = wb.getSheetAt(0);
+            for (int i = 1; i <= sheet.getLastRowNum(); i++) {
+                s = new Student();
+                HSSFRow row = sheet.getRow(i);
+                if (row == null){
+                    continue;
+                }
+                String ss = "";
+                for (int j = 0; j < row.getLastCellNum(); j++) {
+                    HSSFCell cell = row.getCell(j);
+                    if (cell==null){
+                        ss = "";
+                    }else if (cell.getCellType()==HSSFCell.CELL_TYPE_BOOLEAN){
+                        ss = String.valueOf(cell.getBooleanCellValue());
+                    }else if (cell.getCellType()== HSSFCell.CELL_TYPE_NUMERIC){
+                        ss = cell.getNumericCellValue() + "";
+                    }else {
+                        ss = cell.getStringCellValue();
+                    }
+                    if (j == 0){
+                        s.setStudentName(ss);
+                    }else if (j == 1){
+                        s.setStudentGender(ss);
+                    }else if (j == 2){
+                        s.setStudentCardNo(ss);
+                    }else if (j == 3){
+                        s.setSchoolName(ss);
+                    }else if (j == 4){
+                        s.setMajorName(ss);
+                    }
+                }
+                students.add(s);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }finally {
+            if (inputStream != null){
+                try {
+                    inputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        studentService.addStudents(students);
     }
 }

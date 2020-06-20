@@ -82,7 +82,7 @@ public class studentController {
         //获得初始化的AlipayClient
         AlipayTradePagePayRequest alipayRequest =  new  AlipayTradePagePayRequest(); //创建API对应的request
         alipayRequest.setReturnUrl( "http://127.0.0.1:80/paymentsuccessful/"+studentNo );
-        alipayRequest.setNotifyUrl( "http://dykqvv.natappfree.cc/paySuccess/"+studentNo+"/"+ out_trade_no+"/"+total_amount); //在公共参数中设置回跳和通知地址
+        alipayRequest.setNotifyUrl( "http://g45xpt.natappfree.cc/paySuccess/"+studentNo+"/"+ out_trade_no+"/"+total_amount); //在公共参数中设置回跳和通知地址
         alipayRequest.setBizContent( "{"  +
                 "    \"out_trade_no\":\""+out_trade_no+"\","  +
                 "    \"product_code\":\"FAST_INSTANT_TRADE_PAY\","  +

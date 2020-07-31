@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="per.xgt.dao.schoolMapper">
+    <insert id="addSchool">
+        insert into t_school
+        values (null, #{schoolName}, 0)
+    </insert>
+    <select id="findAllSchool" resultType="per.xgt.pojo.School">
+        select schoolId, schoolName
+        from t_school
+        where schoolDel = 0
+    </select>
+    <select id="SchoolDetails" resultType="per.xgt.dto.DtoSchoolDetails">
+        SELECT t_school.schoolId,
+               t_school.schoolName,
+               major.majorCount     majorCount,
+               class.classCount     classCount,
+               student.studentCount studentCount
+        FROM (
+              (SELECT t_school.schoolId schoolId, COUNT(t_major.majorId) majorCount
+               FROM t_school
+                        LEFT JOIN t_major
+                                  ON t_school.schoolId = t_major.majorSchoolId
+               GROUP BY t_school.schoolId) AS major,
+              (SELECT t_school.schoolId schoolId, COUNT(t_class.classId) classCount
+               FROM t_school
+                        LEFT JOIN t_major
+                                  ON t_school.schoolId = t_major.majorSchoolId
+                        LEFT JOIN t_class
+                                  ON t_major.majorId = t_class.classMajorId
+               GROUP BY t_school.schoolId) AS class,
+              (SELECT t_school.schoolId schoolId, COUNT(t_student.studentNo) studentCount
+               FROM t_school
+                        LEFT JOIN t_student
+                                  ON t_student.studentSchoolId = t_school.schoolId
+               GROUP BY t_school.schoolId) AS student
+                 ),
+             t_school
+        WHERE t_school.schoolId = major.schoolId
+          AND t_school.schoolId = class.schoolId
+          AND t_school.schoolId = student.schoolId
+    </select>
+    <select id="findSchoolBySchoolName" resultType="java.lang.Integer">
+        select count(1)
+        from t_school
+        where schoolName = #{schoolName}
+    </select>
+
+    <select id="findSchoolIdBySchoolName" resultType="java.lang.Integer">
+        SELECT schoolId
+        FROM t_school
+        WHERE schoolName = #{schoolName}
+    </select>
+</mapper>

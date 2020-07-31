@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="per.xgt.dao.classMapper">
+
+    <select id="findClassByMajorId" resultType="per.xgt.pojo.Class">
+        select classId, className
+        from t_class
+        where classMajorId = #{majorId}
+          and classDel = 0
+    </select>
+    <select id="getClassDetails" resultType="per.xgt.dto.DtoClassDetails">
+        SELECT tc.classId, tc.className, tb.schoolName, tb.majorName, tc.studentCount
+        FROM (
+                 SELECT t_class.classId classId, t_major.majorName majorName, t_school.schoolName schoolName
+                 FROM t_class
+                          LEFT JOIN t_major
+                                    ON t_class.classMajorId = t_major.majorId
+                          LEFT JOIN t_school
+                                    ON t_school.schoolId = t_major.majorSchoolId
+                 GROUP BY t_class.classId
+             ) tb
+                 INNER JOIN(
+            SELECT t_class.classId classId, t_class.className className, COUNT(t_student.studentNo) studentCount
+            FROM t_class
+                     LEFT JOIN t_student
+                               ON t_class.classId = t_student.studentClassId
+            GROUP BY t_class.classId
+        ) tc
+                           ON tb.classId = tc.classId
+    </select>
+
+    <select id="getClassByClassName" resultType="java.lang.Integer">
+        SELECT COUNT(1)
+        FROM t_class
+        WHERE t_class.className = #{className}
+    </select>
+
+    <select id="getCountByClassId" resultType="java.lang.Integer">
+        SELECT COUNT(1)
+        FROM t_student
+        WHERE studentClassId = #{studentClassId}
+    </select>
+
+    <select id="findClassIdByMajorName" resultType="java.lang.Integer">
+        SELECT class.classId studentClassId
+        FROM t_student s
+                 RIGHT JOIN
+             (SELECT c.classId
+              FROM t_class c
+                       INNER JOIN t_major m
+                                  ON c.classMajorId = m.majorId
+              WHERE m.majorId = #{param1}
+                AND c.className LIKE CONCAT('%',#{param2},'%')) class
+             ON s.studentClassId = class.classId
+        GROUP BY class.classId
+        ORDER BY COUNT(s.studentNo) ASC
+        LIMIT 1
+
+    </select>
+
+    <insert id="addClass">
+        insert into t_class
+        values (null,#{className},#{majorId},#{instructorId},0)
+    </insert>
+
+</mapper>

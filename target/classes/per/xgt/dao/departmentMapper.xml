@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="per.xgt.dao.departmentMapper">
+    <select id="findAllDepartment" resultType="per.xgt.pojo.Department">
+        select *
+        from t_department
+        where departmentDel = 0;
+    </select>
+</mapper>

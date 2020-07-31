@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="per.xgt.dao.studentMapper">
+
+    <insert id="addOneStudent">
+        insert into t_student
+        values (#{param1}, #{param2}, #{param3}, #{param4}, #{param5}, #{param6}, null, null, #{param7}, #{param8},
+                #{param9}, #{param10}, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+    </insert>
+
+    <insert id="addOneOfListStudent" parameterType="per.xgt.pojo.Student">
+        insert into t_student
+        values (#{studentNo},#{studentPassword},#{studentRoleId},#{studentName},#{studentGender},#{studentCardNo},null,null,#{studentSchoolId},#{studentMajorId},#{studentClassId},#{studentDormitoryId},0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+    </insert>
+
+    <select id="findOneByStudentNo" resultType="per.xgt.pojo.Student">
+        select *
+        from t_student
+        where studentState != 1
+          and studentNo = #{username}
+          and studentPassword = #{password}
+    </select>
+
+    <select id="findAllStudentByFilter" resultType="per.xgt.pojo.Student">
+        select student.*,class.className className
+        from t_student student
+        INNER JOIN t_school school
+        INNER JOIN t_major major,t_class class
+        WHERE student.studentClassId = class.classId
+        <if test="param1 != 0">
+            and student.studentSchoolId = #{param1}
+        </if>
+        <if test="param2 != 0">
+            and student.studentMajorId = #{param2}
+        </if>
+        <if test="param3 != 0">
+            and student.studentClassId = #{param3}
+        </if>
+        GROUP BY student.studentNo
+        order by student.studentNo
+    </select>
+
+    <select id="getStudentByStudentNo" resultType="per.xgt.pojo.Student">
+        select student.*, school.schoolName, major.majorName, class.className
+        from t_student student
+                 INNER JOIN t_school school
+                            ON student.studentSchoolId = school.schoolId
+                 INNER JOIN t_major major
+                            ON student.studentMajorId = major.majorId
+                 INNER JOIN t_class class
+                            ON student.studentClassId = class.classId
+        where studentNo = #{studentNo}
+    </select>
+
+    <select id="studentTu" resultType="per.xgt.dto.DtoStudentTu">
+        SELECT student.studentGender, COUNT(student.studentNo) count
+        FROM t_student student
+        GROUP BY student.studentGender
+    </select>
+
+    <select id="getAstudentByNewStudentNo" resultType="per.xgt.dto.DtoAddStudent">
+        SELECT student.studentNo, student.studentName, school.schoolName, major.majorName, class.className
+        FROM t_student student
+                 INNER JOIN t_school school
+                            ON student.studentSchoolId = school.schoolId
+                 INNER JOIN t_major major
+                            ON student.studentMajorId = major.majorId
+                 INNER JOIN t_class class
+                            ON student.studentClassId = class.classId
+        WHERE student.studentNo = #{studentNo}
+    </select>
+
+    <select id="findAllStudentsByClassId" resultType="per.xgt.dto.DtoStudentByClass">
+        SELECT s.studentNo,s.studentName,s.studentGender
+        FROM t_student s
+        WHERE s.studentClassId = #{classId}
+    </select>
+
+    <update id="payTuition">
+        update t_student
+        set ${param2} = #{param3}
+        where studentNo = #{param1}
+    </update>
+
+    <update id="check">
+        update t_student
+        set ${param2} = 1
+        where studentNo = #{param1}
+    </update>
+
+    <update id="updateStudentPassword">
+        update t_student
+        set studentPassword = #{param2}
+        where studentNo = #{param1}
+    </update>
+
+</mapper>

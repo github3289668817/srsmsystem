@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="per.xgt.dao.majorMapper">
+
+    <select id="findMajorBySchoolId" resultType="per.xgt.pojo.Major">
+        select majorId,majorName
+        from t_major
+        where majorSchoolId = #{schoolId}
+        and majorDel = 0
+    </select>
+
+    <select id="getMajorsBySchoolId" resultType="per.xgt.pojo.Major">
+        SELECT t_major.majorId,t_major.majorName,t_school.schoolName
+        FROM t_major,t_school
+        WHERE t_major.majorSchoolId = t_school.schoolId
+        <if test="schoolId != 0">
+              AND t_school.schoolId = 1
+        </if>
+    </select>
+
+    <select id="findMajorByMajorName" resultType="java.lang.Integer">
+        select count(1)
+        from t_major
+        where majorName = #{majorName}
+    </select>
+
+    <insert id="addMajor">
+        insert into t_major
+        values (null,#{param1},#{param2},0)
+    </insert>
+
+    <select id="findAllMajor" resultType="per.xgt.pojo.Major">
+        select majorId,majorName
+        from t_major
+    </select>
+
+    <select id="findMajorIdByMajorName" resultType="java.lang.Integer">
+        SELECT majorId
+        FROM t_major
+        WHERE majorName = #{majorName}
+    </select>
+
+</mapper>
